@@ -1,69 +1,39 @@
-# React + TypeScript + Vite
+# 📬 Recruiter Outreach Automation – Cold Email Sender App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🧩 Problem Statement
 
-Currently, two official plugins are available:
+Job seekers often spend countless hours manually:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Searching for recruiter email addresses  
+- Typing personalized email messages  
+- Adding subject lines, signatures, and attachments  
+- Sending emails one-by-one  
 
-## Expanding the ESLint configuration
+This is **time-consuming, repetitive, and error-prone**, especially when applying to multiple companies or roles.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✅ Solution
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+This app automates the **cold email process to recruiters**.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- You simply add a **list of recruiters** (email IDs, names, companies)  
+- Draft **one email body** with subject and signature  
+- Upload your **resume**  
+- Click **Send**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+💡 The backend handles everything:
+- Sends personalized emails from your email address to each recruiter  
+- Attaches your resume automatically  
+- Tracks which emails were sent  
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+
+## 🎯 Key Features
+
+- 📒 Add/Edit/Delete recruiter info  
+- ✍️ One-click email template creation  
+- 📎 Resume upload and auto-attachment  
+- 📨 Cold email sending with personalization  
+
