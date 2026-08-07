@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import './Login.css';
+import { useState } from "react";
+import "./Login.css";
+import authService from "../services/authService";
 
 interface LoginFormData {
   email: string;
@@ -13,12 +14,13 @@ interface LoginFormErrors {
 
 interface LoginProps {
   onLoginSuccess: () => void;
+  onSignup: () => void;
 }
 
-const Login = ({ onLoginSuccess }: LoginProps) => {
+const Login = ({ onLoginSuccess, onSignup }: LoginProps) => {
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState<LoginFormErrors>({});
@@ -30,16 +32,16 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
 
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = "Please enter a valid email address";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -48,38 +50,42 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name as keyof LoginFormErrors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
-    // Simulate API call
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Login attempt:', formData);
-      // Redirect to dashboard on any login attempt
+      const credential = await authService.login({
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+      });
+
+      console.log("Firebase User:", credential.user);
+
       onLoginSuccess();
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
+    } catch (error: any) {
+      console.error(error);
+
+      alert(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -103,23 +109,25 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Enter your email address"
-              className={errors.email ? 'error' : ''}
+              className={errors.email ? "error" : ""}
               disabled={isLoading}
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {errors.email && (
+              <span className="error-message">{errors.email}</span>
+            )}
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input-container">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Enter your password"
-                className={errors.password ? 'error' : ''}
+                className={errors.password ? "error" : ""}
                 disabled={isLoading}
               />
               <button
@@ -128,10 +136,12 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
               >
-                {showPassword ? '👁️' : '👁️‍🗨️'}
+                {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
-            {errors.password && <span className="error-message">{errors.password}</span>}
+            {errors.password && (
+              <span className="error-message">{errors.password}</span>
+            )}
           </div>
 
           <div className="form-options">
@@ -140,12 +150,14 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
               <span className="checkmark"></span>
               Keep me signed in
             </label>
-            <a href="#" className="forgot-password">Forgot password?</a>
+            <a href="#" className="forgot-password">
+              Forgot password?
+            </a>
           </div>
 
           <button
             type="submit"
-            className={`login-button ${isLoading ? 'loading' : ''}`}
+            className={`login-button ${isLoading ? "loading" : ""}`}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -154,15 +166,17 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 Signing in...
               </>
             ) : (
-              'Sign In'
+              "Sign In"
             )}
           </button>
         </form>
 
         <div className="login-footer">
           <p>
-            Don't have an account?{' '}
-            <a href="#" className="signup-link">Contact your administrator</a>
+            Don't have an account?{" "}
+            <button type="button" className="signup-link" onClick={onSignup}>
+              Create New Account
+            </button>
           </p>
         </div>
       </div>
@@ -170,4 +184,4 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   );
 };
 
-export default Login; 
+export default Login;
