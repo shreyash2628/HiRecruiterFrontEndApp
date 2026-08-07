@@ -1,24 +1,36 @@
-import { useState } from 'react'
-import Login from './Component/Login'
-import Dashboard from './Component/Dashboard'
-import './App.css'
+import { useState } from "react";
+
+import Login from "./Component/Login";
+import Signup from "./Component/SignUp";
+import Dashboard from "./Component/Dashboard";
+
+import "./App.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
+  const [currentPage, setCurrentPage] = useState<
+    "login" | "signup" | "dashboard"
+  >("login");
 
   return (
     <div className="App">
-      {isLoggedIn ? (
+      {currentPage === "login" && (
+        <Login
+          onLoginSuccess={() => setCurrentPage("dashboard")}
+          onSignup={() => setCurrentPage("signup")}
+        />
+      )}
+
+      {currentPage === "signup" && (
+        <Signup
+          onLogin={() => setCurrentPage("login")}
+        />
+      )}
+
+      {currentPage === "dashboard" && (
         <Dashboard />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
