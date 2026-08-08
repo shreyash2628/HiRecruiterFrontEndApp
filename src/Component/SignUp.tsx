@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Login.css";
 import authService from "../services/authService";
+import userService from "../services/userService";
 
 interface SignupFormData {
   firstName: string;
@@ -108,7 +109,17 @@ const Signup = ({ onLogin }: SignupProps) => {
         password: formData.password,
       });
 
-      console.log("Firebase User:", credential.user);
+      await userService.createUser({
+        uid: credential.user.uid,
+
+        firstName: formData.firstName.trim(),
+
+        lastName: formData.lastName.trim(),
+
+        email: formData.email.trim().toLowerCase(),
+
+        phoneNumber: formData.phoneNumber,
+      });
 
       alert("Account created successfully");
 
